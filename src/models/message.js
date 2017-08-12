@@ -637,7 +637,7 @@ class Message extends Syncable {
     const oldPosition = this.position;
     this.position = message.position;
     this._setupPartIds(message.parts);
-    this.parts = message.parts.map((part) => {
+    const parts = message.parts.map((part) => {
       const existingPart = this.getPartById(part.id);
       if (existingPart) {
         existingPart._populateFromServer(part);
@@ -646,6 +646,7 @@ class Message extends Syncable {
         return MessagePart._createFromServer(part);
       }
     });
+    this.parts = parts;
 
     this.recipientStatus = message.recipient_status || {};
 
