@@ -641,6 +641,21 @@ class MessagePart extends Root {
     });
   }
 
+  __adjustUpdatedAt(date) {
+    if (typeof date === 'string') return new Date(date);
+  }
+
+  /**
+   * Accepts json-patch operations for modifying recipientStatus.
+   *
+   * @method _handlePatchEvent
+   * @private
+   * @param  {Object[]} data - Array of operations
+   */
+  _handlePatchEvent(newValue, oldValue, paths) {
+
+  }
+
   /**
    * Creates a MessagePart from a server representation of the part
    *
@@ -663,6 +678,7 @@ class MessagePart extends Root {
       _content: content,
       hasContent: Boolean(content),
       size: part.size || 0,
+      updatedAt: new Date(part.updated_at),
     });
   }
 }
@@ -752,6 +768,16 @@ MessagePart.prototype.mimeType = 'text/plain';
  * @type {Object}
  */
 MessagePart.prototype.mimeAttributes = null;
+
+/**
+ * Time that the part was last updated.
+ *
+ * If the part was created after the message was sent, or the part was updated after the
+ * part was sent then this will have a value.
+ *
+ * @type {Date}
+ */
+MessagePart.prototype.updatedAt = null;
 
 /**
  * Size of the layer.MessagePart.body.
